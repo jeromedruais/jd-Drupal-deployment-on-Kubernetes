@@ -1,25 +1,25 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: wordpress
+  name: drupal
   labels:
-    app: wordpress
+    app: drupal
 spec:
   ports:
     - port: 80
       targetPort: 80
       nodePort: 30180
   selector:
-    app: wordpress
+    app: drupal
     tier: frontend
   type: NodePort
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: wp-lv-claim
+  name: drupal-lv-claim
   labels:
-    app: wordpress
+    app: drupal
 spec:
   accessModes:
     - ReadWriteOnce
@@ -30,38 +30,37 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: wordpress
+  name: drupal
   labels:
-    app: wordpress
+    app: drupal
 spec:
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress
+        app: drupal
         tier: frontend
     spec:
       containers:
-      - image: wordpress:latest
-        name: wordpress
+      - image: drupal:latest
+        name: drupal
+        Database host: mysql
         env:
-        - name: WORDPRESS_DB_HOST
-          value: wordpress-mysql
-        # - name: WORDPRESS_DB_USER
-        #   value: admin
-        - name: WORDPRESS_DB_PASSWORD
+        - name: MYSQL_USER
+          value: admin
+        - name: MYSQL_DATABASE
           valueFrom:
             secretKeyRef:
               name: mysql-pass
               key: password.txt
         ports:
         - containerPort: 80
-          name: wordpress
+          name: drupal
         volumeMounts:
-        - name: wordpress-local-storage
+        - name: drupal-local-storage
           mountPath: /var/www/html
       volumes:
-      - name: wordpress-local-storage
+      - name: drupal-local-storage
         persistentVolumeClaim:
-          claimName: wp-lv-claim
+          claimName: drupal-lv-claim

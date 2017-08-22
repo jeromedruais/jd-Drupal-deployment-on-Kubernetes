@@ -9,7 +9,7 @@ LinuxONE was built for open source so you can harness the agility of the open re
 - [LinuxONE](https://www-03.ibm.com/systems/linuxone/open-source/index.html)
 - [Docker](https://www.docker.com)
 - [Docker Store](https://sore.docker.com)
-- [WordPress](https://workpress.com)
+- [drupal](https://workpress.com)
 - [MariaDB](https://mariadb.org)
 
 ## Prerequisites
@@ -25,7 +25,7 @@ red 'Request your trial' button on the lower left side of this page:
 containers, as there are quite a few images ready to for your to use.  You can
 browse the list of images that are compatable with LinuxONE by doing a search
 on the ['s390x'](https://hub.docker.com/search/?isAutomated=0&isOfficial=0&page=1&pullCount=0&q=s390x&starCount=0) tag.
-We will start off with everyone's favorite demo: an installation of WordPress.
+We will start off with everyone's favorite demo: an installation of drupal.
 These instructions assume a base RHEL 7.2 image.  If you are using Ubuntu,
 please follow the separate [instructions](docs/ubuntu.md)
 
@@ -59,7 +59,7 @@ Finally, install docker-compose itself
 sudo pip install docker-compose
 ```
 
-### 3. Run and install WordPress
+### 3. Run and install drupal
 
 Now that we have docker-compose installed, we will create a docker-compose.yml
 file.  This will specifiy a couple of containers from the Docker Store that
@@ -74,12 +74,12 @@ version: '2'
 
 services:
 
-  wordpress:
-    image: s390x/wordpress
+  drupal:
+    image: s390x/drupal
     ports:
       - 8080:80
     environment:
-      WORDPRESS_DB_PASSWORD: example
+      drupal_DB_PASSWORD: example
 
   mysql:
     image: brunswickheads/mariadb-5.5-s390x
@@ -99,12 +99,12 @@ After all is installed, you can check the status of your containers
        Name                     Command               State          Ports         
 ----------------------------------------------------------------------------------
 linux1_mysql_1       /docker-entrypoint.sh mysq ...   Up      3306/tcp             
-linux1_wordpress_1   /entrypoint.sh apache2-for ...   Up      0.0.0.0:8080->80/tcp
+linux1_drupal_1   /entrypoint.sh apache2-for ...   Up      0.0.0.0:8080->80/tcp
 ```
 and checkout your new blog by using a webbrowser to access http://localhost:8080
 
 ![after_deploy](../images/wpinstall-language.png)
 
 You will see the default setup screen requesting your language.  The following
-screen will ask you to specify a default username/password for the WordPress
+screen will ask you to specify a default username/password for the drupal
 installation, after which you will be up and running!

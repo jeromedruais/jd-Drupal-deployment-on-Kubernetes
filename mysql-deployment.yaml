@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: wordpress-mysql
+  name: drupal-mysql
   labels:
-    app: wordpress
+    app: drupal
 spec:
   ports:
     - port: 3306
   selector:
-    app: wordpress
+    app: drupal
     tier: mysql
   clusterIP: None
 ---
@@ -17,7 +17,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mysql-lv-claim
   labels:
-    app: wordpress
+    app: drupal
 spec:
   accessModes:
     - ReadWriteOnce
@@ -28,16 +28,16 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: wordpress-mysql
+  name: drupal-mysql
   labels:
-    app: wordpress
+    app: drupal
 spec:
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wordpress
+        app: drupal
         tier: mysql
     spec:
       containers:
