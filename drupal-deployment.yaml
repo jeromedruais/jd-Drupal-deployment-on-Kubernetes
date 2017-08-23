@@ -45,7 +45,6 @@ spec:
       containers:
       - image: drupal:latest
         name: drupal
-        Database host: mysql
         env:
         - name: MYSQL_USER
           value: admin
